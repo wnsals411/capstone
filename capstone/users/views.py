@@ -1,45 +1,48 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import DetailView, RedirectView, UpdateView
+from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from .forms import SignUpForm, LogInForm
 
-User = get_user_model()
+def main(request):
+    if request.method == 'GET':
+        form = LogInForm()
+        return render(request, 'users/main.html', {'form': form})
 
+    elif request.method == 'POST':
+        form = LogInForm(request.POST)
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+        username = request.POST['username']
+        password = request.POST['password']
 
-    model = User
-    slug_field = "username"
-    slug_url_kwarg = "username"
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('users:index'))
+        else:
+            return HttpResponse("등록되지 않은 사용자입니다.")    
+    return render(request, 'users/main.html')
 
+def signup(request):
+    if request.method == 'GET':
+        form = SignUpForm()
 
-user_detail_view = UserDetailView.as_view()
+        return render(request, 'users/signup.html', {'form':form})
+    elif request.method == 'POST':
+        form = SignUpForm(request.POST)
 
+        if form.is_valid():
+            form.save()
 
-class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
 
-    model = User
-    fields = ["name"]
-    success_message = _("Information successfully updated")
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('users:index'))
+            
+        return render(request, 'users/main.html')
 
-    def get_success_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
-
-    def get_object(self):
-        return self.request.user
-
-
-user_update_view = UserUpdateView.as_view()
-
-
-class UserRedirectView(LoginRequiredMixin, RedirectView):
-
-    permanent = False
-
-    def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
-
-
-user_redirect_view = UserRedirectView.as_view()
+def sucess(request):
+    return HttpResponse("로그인 성공!")

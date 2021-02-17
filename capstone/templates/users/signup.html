@@ -1,0 +1,17 @@
+<h1> 회원가입 페이지 </h1>
+
+<form action="{% url 'users:signup' %}" method="post">
+    {% csrf_token %}
+
+    {% for filed in form %}
+        <div class = "fieldWrapper">
+            {{ filed.errors }}
+            {{ filed.label_tag }} {{ filed }}
+        </div>
+    {% endfor %}
+    <input type="submit" value="완료">
+
+
+</form>
+
+<a href="{% url 'users:main' %}"> Login </a>
