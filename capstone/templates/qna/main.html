@@ -43,7 +43,8 @@
     <tr>
     <td>
     {% for page in totalPageList %}
-    <a href="/qna/current_page={{page}}" >
+    
+    <a href="{% url 'qna:pageview' page %}" >
     [
     {% ifequal page current_page %}
     <b>
@@ -61,6 +62,7 @@
     
     <table width=700>
     <tr>
+
     <td><input type=button value="글쓰기" OnClick="window.location='/qna/write'"> </td>
     <td><form name=searchf method='post' action="{% url 'qna:search' %}">
         {% csrf_token %}
