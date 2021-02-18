@@ -68,11 +68,19 @@ def detail(request, board_id):
     return render(request, 'qna/detail.html', {'board':board})
 
 def delete(request, board_id):
-    board = get_object_or_404(Board, id=board_id)
+    if request.method == 'POST':
+
+        board = get_object_or_404(Board, id=board_id)
+        if board.password == request.POST['password']:
+            board.delete()
+            return HttpResponseRedirect(reverse('qna:main'))
+        else:
+            return render(request, 'qna/detail.html', {'board':board, 'error_message': "비밀번호 오류"})
     
-    board.delete()
+    elif request.method == 'GET':
+        return HttpResponseRedirect(reverse('qna:datail', args = (board_id,)))
+        
     
-    return HttpResponseRedirect(reverse('qna:main'))
 
 def search(request):
     if request.method == 'POST':

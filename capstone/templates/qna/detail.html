@@ -8,5 +8,13 @@
 등록일 -- {{board.create_at}}</br>
 
 
+
+<!-- <td><input type=button value="삭제" OnClick="window.location='/qna/{{board.id}}/delete'"> </td> -->
+<td><form name=searchf method='post' action="{% url 'qna:delete' board.id %}">
+    {% csrf_token %}
+<input type='password' placeholder = '글 작성시 비밀번호' name='password' size=13 maxlength=20>
+<input type=submit value="삭제"></td>
+</form>
 <td><input type=button value="글목록" OnClick="window.location='/qna'"> </td>
-<td><input type=button value="삭제" OnClick="window.location='/qna/{{board.id}}/delete'"> </td>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}

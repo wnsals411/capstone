@@ -5,7 +5,7 @@ from django.db import models
 class TimeStamedModel(models.Model):
     create_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
-    create_at.editable = True
+    
     
     class Meta:
         abstract = True
@@ -17,7 +17,7 @@ class Board(TimeStamedModel):
     content = models.CharField(max_length = 500) # 내용
     image = models.ImageField(blank = True) # 이미지(사진)
     hits = models.IntegerField(default = 0) # 조회수
-    #password = models.CharField(blank = True, max_length = 20) # 비밀번호
+    password = models.CharField(max_length = 20)
 
     def __str__(self):
         return self.title
