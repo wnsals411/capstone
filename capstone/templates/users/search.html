@@ -1,0 +1,18 @@
+<h1>User Search</h1>
+<br>
+
+<form action="{% url 'users:search' %}" method="post"> {% csrf_token %}
+    {{ form.as_table }} <!-- form을 테이블 형식으로 표시, 여기서 form은 views에서 넘겨준 PostSearchForm 객체임-->
+    <input type="submit" value="Submit" class="btn btn-primary btn-sm">
+</form>
+
+<br/><br/>
+
+{% if object_list %}
+    {% for user in object_list %}
+        <h2><a href='{{ User.get_absolute_url }}'>{{ user.name }}</a></h2>  <!-- User모델의 함수 (user:detail)로 넘어가는 링크 -->
+        <p>{{ user.email }}</p>
+    {% endfor %}
+{% elif search_term %}<!-- 검색란이 공란인지 확인-->
+    <b><i>Search Word({{ search_term }}) Not Found</i></b>
+{% endif %}

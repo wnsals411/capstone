@@ -1,0 +1,12 @@
+<h1>제목 -- {{board.title}}</h1>
+글번호 -- {{board.id}}</br>
+글번호 -- {{board.pk}}</br>
+작성자 -- {{board.author}}</br>
+내용 -- {{board.content}}</br>
+이미지 -- {{board.image}}</br>
+조회수 -- {{board.hits}}</br>
+등록일 -- {{board.create_at}}</br>
+
+
+<td><input type=button value="글목록" OnClick="window.location='/qna'"> </td>
+<td><input type=button value="삭제" OnClick="window.location='/qna/{{board.id}}/delete'"> </td>

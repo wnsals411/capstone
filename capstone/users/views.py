@@ -2,7 +2,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
-from .forms import SignUpForm, LogInForm
+from .forms import SignUpForm, LogInForm, UserSearchForm
+from django.views.generic.edit import FormView
+from .models import User
+from django.db.models import Q
 
 def main(request):
     if request.method == 'GET':
@@ -46,3 +49,14 @@ def signup(request):
 
 def sucess(request):
     return HttpResponse("로그인 성공!")
+
+class SearchFormView(FormView):
+    form_class = UserSearchForm
+    template_name = 'users/search.html'
+
+    def form_valid(self, form):
+        searchWord = form.cleaned_data['search_word']
+        user_list = User.objects.filter(Q(name__icontains=searchWord) | Q(email__icontains=searchWord) | Q(bio__icontains=searchWord)).distinct()
+
+        context = {'form': form, 'search_term': searchWord, 'object_list': user_list}
+        return render(self.request, self.template_name, context)

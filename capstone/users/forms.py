@@ -61,3 +61,6 @@ class LogInForm(django_forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class UserSearchForm(django_forms.Form):
+    search_word = django_forms.CharField(label='Search Word')

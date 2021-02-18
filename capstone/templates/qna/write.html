@@ -1,0 +1,13 @@
+<form action="{% url 'qna:write' %}" method="post">
+    {% csrf_token %}
+
+    {% for filed in form %}
+        <div class = "fieldWrapper">
+            {{ filed.errors }}
+            {{ filed.label_tag }} {{ filed }}
+        </div>
+    {% endfor %}
+    <input type="submit" value="OK">
+
+
+</form>
