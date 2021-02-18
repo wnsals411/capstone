@@ -6,21 +6,22 @@ from qna.forms import WriteForm
 from django.views import generic
 from django.db.models import Q
 
-# 한 페이지에 보여줄 게시물 수
-rowsPerPage = 5
-def main(request):
-    current_page = 1
-    # 글 번호 최신순으로 rowsPerPage 개씩 보여줌
-    boardList = Board.objects.order_by('-id')[rowsPerPage * (current_page-1):rowsPerPage * current_page]
-    # 총 게시물 수
-    totalCnt = Board.objects.all().count() 
 
-    pagingHelperlns = pagingHelper()
-    totalPageList = pagingHelperlns.getTotalPageList(totalCnt, rowsPerPage)
+rowsPerPage = 5 # 한 페이지에 보여줄 게시물 수
+def main(request):
+    return HttpResponseRedirect(reverse('qna:pageview', args=(1,))) # pageview로 인수(page)에 1을 넣어 넘겨줌
+
+def pageview(request, page): 
+    current_page = page # 페이지 번호
+    # 화면에 띄울 게시물 (한 페이지에 보여줄 게시물 수) 
+    boardList = Board.objects.order_by('-id')[rowsPerPage * (current_page-1):rowsPerPage * current_page]
+    totalCnt = Board.objects.all().count() # 총 게시물수
+
+    pagingHelperlns = pagingHelper() # 클래스 선언
+    totalPageList = pagingHelperlns.getTotalPageList(totalCnt, rowsPerPage) # 총 게시물수와 한페이지당 보여줄 게시물수에 따라 페이지수를 결정함
     print ('totalPageList', totalPageList)
     return render(request, 'qna/main.html', {'boardList': boardList, 'totalCnt': totalCnt, 
                                             'current_page': current_page, 'totalPageList': totalPageList})
-
 
 class pagingHelper:
     def getTotalPageList(self, total_cnt, rowsPerPage):
@@ -55,16 +56,7 @@ def write(request): # 글 쓰기
             
         return HttpResponseRedirect(reverse('qna:main'))
 
-def pageview(request, page): # 페이지 번호
-    current_page = page
-    boardList = Board.objects.order_by('-id')[rowsPerPage * (current_page-1):rowsPerPage * current_page]
-    totalCnt = Board.objects.all().count() 
 
-    pagingHelperlns = pagingHelper()
-    totalPageList = pagingHelperlns.getTotalPageList(totalCnt, rowsPerPage)
-    print ('totalPageList', totalPageList)
-    return render(request, 'qna/main.html', {'boardList': boardList, 'totalCnt': totalCnt, 
-                                            'current_page': current_page, 'totalPageList': totalPageList})
 
 
 def detail(request, board_id):
@@ -95,4 +87,3 @@ def search(request):
                                             
     if request.method == 'GET':
         return HttpResponseRedirect(reverse('qna:main'))
-                                
