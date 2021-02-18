@@ -3,13 +3,12 @@
 글번호 -- {{board.pk}}</br>
 작성자 -- {{board.author}}</br>
 내용 -- {{board.content}}</br>
-이미지 -- {{board.image}}</br>
+이미지 -- <img src ="{{ board.image.url }}" alt = "{{board.image}}">  {{board.image}}</br>
 조회수 -- {{board.hits}}</br>
 등록일 -- {{board.create_at}}</br>
 
 
 
-<!-- <td><input type=button value="삭제" OnClick="window.location='/qna/{{board.id}}/delete'"> </td> -->
 <td><form name=searchf method='post' action="{% url 'qna:delete' board.id %}">
     {% csrf_token %}
 <input type='password' placeholder = '글 작성시 비밀번호' name='password' size=13 maxlength=20>
