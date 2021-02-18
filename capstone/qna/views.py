@@ -49,10 +49,20 @@ def write(request): # 글 쓰기
 
         return render(request, 'qna/write.html', {'form': form})
     if request.method == 'POST':
-        form = WriteForm(request.POST)
-
-        if form.is_valid():
-            form.save()
+        title = request.POST['title']
+        author = request.POST['author']
+        content = request.POST['content']
+        image = request.FILES['image']
+        password = request.POST['password']
+        
+        new_post = Board.objects.create(
+            title = title,
+            author = author,
+            content = content,
+            image = image,
+            password = password
+        )
+        new_post.save()
             
         return HttpResponseRedirect(reverse('qna:main'))
 
@@ -61,7 +71,6 @@ def write(request): # 글 쓰기
 
 def detail(request, board_id):
     board = get_object_or_404(Board, id=board_id)
-    
     board.hits += 1
     board.save()
 

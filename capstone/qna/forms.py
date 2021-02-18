@@ -12,7 +12,7 @@ class WriteForm(forms.ModelForm):
             'title': "",
             'author': '',
             'content': '',
-            'image': '',
+            'image': '이미지첨부',
             'password': '',
         }
 
@@ -20,6 +20,5 @@ class WriteForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'placeholder':'제목'}),
             'author': forms.TextInput(attrs={'placeholder':'이름'}),
             'content': forms.TextInput(attrs={'placeholder':'내용 최대xx자'}),
-            'image': forms.TextInput(attrs={'placeholder':'이미지 등록'}),
             'password': forms.PasswordInput(attrs={'placeholder':'비밀번호'}),
         }          
