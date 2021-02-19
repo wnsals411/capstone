@@ -52,7 +52,7 @@ def write(request): # 글 쓰기
         title = request.POST['title']
         author = request.POST['author']
         content = request.POST['content']
-        image = request.FILES['image']
+        image = request.FILES.get('image')
         password = request.POST['password']
         
         new_post = Board.objects.create(

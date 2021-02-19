@@ -3,7 +3,7 @@
 글번호 -- {{board.pk}}</br>
 작성자 -- {{board.author}}</br>
 내용 -- {{board.content}}</br>
-이미지 -- <img src ="{{ board.image.url }}" alt = "{{board.image}}">  {{board.image}}</br>
+{% if board.image %} 이미지 -- <img src ="{{ board.image.url }}" alt = "{{board.image}}">  {{board.image}}</br> {% endif %}
 조회수 -- {{board.hits}}</br>
 등록일 -- {{board.create_at}}</br>
 
